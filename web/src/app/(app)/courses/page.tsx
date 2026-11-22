@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import CourseCard from "@/components/CourseCard";
 import type { Category, Course } from "@/types";
+import Loading from "@/components/Loading";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[] | null>(null);
@@ -61,7 +62,7 @@ export default function CoursesPage() {
       </div>
 
       {!courses ? (
-        <p className="text-slate-500">Memuat course...</p>
+        <Loading />
       ) : courses.length === 0 ? (
         <p className="text-slate-500">Course tidak ditemukan.</p>
       ) : (

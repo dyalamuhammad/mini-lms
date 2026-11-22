@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import ProgressBar from "@/components/ProgressBar";
 import type { Curriculum, LessonDetail, Progress } from "@/types";
+import ReactMarkdown from "react-markdown";
+import Loading from "@/components/Loading";
 
 export default function LearnPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -62,8 +64,7 @@ export default function LearnPage() {
         </Link>
       </p>
     );
-  if (!cur || !progress)
-    return <p className="text-slate-500">Memuat course...</p>;
+  if (!cur || !progress) return <Loading />;
 
   return (
     <div className="space-y-4">
@@ -88,7 +89,7 @@ export default function LearnPage() {
         {/* Lesson viewer */}
         <section className="space-y-4 lg:col-span-2">
           {!lesson ? (
-            <p className="text-slate-500">Memuat lesson...</p>
+            <Loading label="Memuat lesson..." />
           ) : (
             <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
               {lesson.video_url && (
@@ -108,9 +109,9 @@ export default function LearnPage() {
                     {lesson.title}
                   </h2>
                 </div>
-                <p className="whitespace-pre-line text-slate-700">
-                  {lesson.content}
-                </p>
+                <div className="space-y-2 text-slate-700">
+                  <ReactMarkdown>{lesson.content ?? ""}</ReactMarkdown>
+                </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
                   <button

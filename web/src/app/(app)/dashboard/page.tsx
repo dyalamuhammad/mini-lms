@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import ProgressBar from "@/components/ProgressBar";
 import type { Dashboard } from "@/types";
+import Loading from "@/components/Loading";
 
 const fmt = (d: string) =>
   new Date(d).toLocaleDateString("id-ID", {
@@ -22,7 +23,7 @@ export default function DashboardPage() {
     api.get("/dashboard").then((r) => setData(r.data.data));
   }, []);
 
-  if (!data) return <p className="text-slate-500">Memuat dashboard...</p>;
+  if (!data) return <Loading label="Memuat dashboard..." />;
 
   const { stats, continue_learning: cont } = data;
   const cards = [

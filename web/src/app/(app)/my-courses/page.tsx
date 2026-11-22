@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import CourseCard from "@/components/CourseCard";
 import type { Course } from "@/types";
+import Loading from "@/components/Loading";
 
 export default function MyCoursesPage() {
   const [courses, setCourses] = useState<Course[] | null>(null);
@@ -18,7 +19,7 @@ export default function MyCoursesPage() {
       <h1 className="text-2xl font-bold text-blue-950">My Courses</h1>
 
       {!courses ? (
-        <p className="text-slate-500">Memuat...</p>
+        <Loading />
       ) : courses.length === 0 ? (
         <p className="text-slate-500">
           Kamu belum mengikuti course apa pun.{" "}

@@ -9,6 +9,7 @@ export default function CourseCard({ course }: { course: Course }) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        loading="lazy"
         src={course.thumbnail ?? ""}
         alt={course.title}
         className="aspect-video w-full bg-slate-200 object-cover"

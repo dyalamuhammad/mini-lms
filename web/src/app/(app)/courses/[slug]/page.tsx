@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import type { Course } from "@/types";
+import Loading from "@/components/Loading";
 
 type Meta = { modules_count: number; lessons_count: number };
 
@@ -44,8 +45,7 @@ export default function CourseDetailPage() {
 
   if (notFound)
     return <p className="text-slate-500">Course tidak ditemukan.</p>;
-  if (!course || !meta)
-    return <p className="text-slate-500">Memuat course...</p>;
+  if (!course || !meta) return <Loading label="Memuat Course..." />;
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
