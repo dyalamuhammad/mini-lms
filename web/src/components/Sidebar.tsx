@@ -20,10 +20,16 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const items =
-    user?.role === "admin"
-      ? [...menus, { href: "/admin", label: "Admin Panel" }]
-      : menus;
+  const isStaff = user?.role === "admin" || user?.role === "instructor";
+  const items = isStaff
+    ? [
+        ...menus,
+        {
+          href: "/admin",
+          label: user?.role === "admin" ? "Admin Panel" : "Instructor Panel",
+        },
+      ]
+    : menus;
 
   return (
     <>

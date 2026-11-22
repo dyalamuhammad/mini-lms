@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/assignments/{assignment}/submit', [AssignmentController::class, 'submit']);
 
 
-    Route::middleware('role:admin')->prefix('admin')->group(function () {
+    Route::middleware('role:admin,instructor')->prefix('admin')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);
         Route::get('/students', [AdminController::class, 'students']);
     });

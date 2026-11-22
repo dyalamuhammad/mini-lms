@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         User::create(['name' => 'Demo Student', 'email' => 'student@learnpath.test', 'password' => Hash::make('password'), 'role' => 'student']);
         User::create(['name' => 'Admin LearnPath', 'email' => 'admin@learnpath.test', 'password' => Hash::make('password'), 'role' => 'admin']);
-        User::create(['name' => 'Budi Santoso', 'email' => 'budi@learnpath.test', 'password' => Hash::make('password'), 'role' => 'admin']);
-        User::create(['name' => 'Sari Wijaya', 'email' => 'sari@learnpath.test', 'password' => Hash::make('password'), 'role' => 'admin']);
+        User::create(['name' => 'Budi Santoso', 'email' => 'budi@learnpath.test', 'password' => Hash::make('password'), 'role' => 'instructor']);
+        User::create(['name' => 'Sari Wijaya', 'email' => 'sari@learnpath.test', 'password' => Hash::make('password'), 'role' => 'instructor']);
     }
 }

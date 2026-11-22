@@ -15,7 +15,7 @@ export default function AdminPage() {
   const [students, setStudents] = useState<AdminStudent[] | null>(null);
 
   useEffect(() => {
-    if (user && user.role !== "admin") {
+    if (user && !["admin", "instructor"].includes(user.role)) {
       router.replace("/dashboard");
       return;
     }
@@ -34,7 +34,9 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-blue-950">Admin Panel</h1>
+      <h1 className="text-2xl font-bold text-blue-950">
+        {user?.role === "admin" ? "Admin Panel" : "Instructor Panel"}
+      </h1>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {cards.map((c) => (

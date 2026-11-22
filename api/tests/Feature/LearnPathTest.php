@@ -120,4 +120,25 @@ class LearnPathTest extends TestCase
         Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
         $this->getJson('/api/admin/stats')->assertOk();
     }
+    public function test_instructor_only_sees_students_in_own_courses(): void
+    {
+        $category = Category::create(['name' => 'Test']);
+        $instructor = User::factory()->create(['role' => 'instructor']);
+        $other = User::factory()->create(['role' => 'instructor']);
+
+        $mine = Course::create(['category_id' => $category->id, 'instructor_id' => $instructor->id, 'title' => 'Mine', 'slug' => 'mine', 'description' => 'x']);
+        $theirs = Course::create(['category_id' => $category->id, 'instructor_id' => $other->id, 'title' => 'Theirs', 'slug' => 'theirs', 'description' => 'x']);
+
+        $a = User::factory()->create(['role' => 'student']);
+        $b = User::factory()->create(['role' => 'student']);
+        $a->enrollments()->create(['course_id' => $mine->id]);
+        $b->enrollments()->create(['course_id' => $theirs->id]);
+
+        Sanctum::actingAs($instructor);
+
+        $this->getJson('/api/admin/students')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $a->id);
+    }
 }

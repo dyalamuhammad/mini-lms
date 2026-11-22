@@ -67,10 +67,11 @@ Buka http://localhost:3000
 
 ## Akun Demo
 
-| Role    | Email                  | Password |
-| ------- | ---------------------- | -------- |
-| Student | student@learnpath.test | password |
-| Admin   | admin@learnpath.test   | password |
+| Role       | Email                  | Password |
+| ---------- | ---------------------- | -------- |
+| Student    | student@learnpath.test | password |
+| Admin      | admin@learnpath.test   | password |
+| Instructor | budi@learnpath.test    | password |
 
 ## Endpoint Utama
 
