@@ -60,7 +60,7 @@ export default function AdminCoursesPage() {
         <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>
       )}
 
-      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-2xl bg-white shadow-sm pb-6">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-100 text-slate-500">
             <tr>
