@@ -29,3 +29,18 @@ export type Dashboard = {
   }[];
   recent_activity: { lesson: string; course: string; completed_at: string }[];
 };
+
+export type Course = {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  thumbnail: string | null;
+  duration: number;
+  level: string;
+  category: string | null;
+  instructor: string | null;
+  is_enrolled: boolean;
+};
+
+export type Category = { id: number; name: string };

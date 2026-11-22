@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Models\Category;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -24,4 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/lessons/{lesson}/complete', [LearningController::class, 'complete']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+
+    Route::get('/categories', fn() => ['data' => Category::select('id', 'name')->get()]);
 });
