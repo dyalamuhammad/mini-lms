@@ -20,6 +20,10 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const items =
+    user?.role === "admin"
+      ? [...menus, { href: "/admin", label: "Admin Panel" }]
+      : menus;
 
   return (
     <>
@@ -37,7 +41,7 @@ export default function Sidebar({
         <div className="px-6 py-6 text-xl font-bold">LearnPath</div>
 
         <nav className="flex-1 space-y-1 px-3">
-          {menus.map((m) => {
+          {items.map((m) => {
             const active = pathname.startsWith(m.href);
             return (
               <Link

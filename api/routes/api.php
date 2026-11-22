@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Models\Category;
 use App\Http\Controllers\Api\AssignmentController;
+use App\Http\Controllers\Api\Admin\AdminController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -35,4 +36,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-assignments', [AssignmentController::class, 'index']);
     Route::get('/assignments/{assignment}', [AssignmentController::class, 'show']);
     Route::post('/assignments/{assignment}/submit', [AssignmentController::class, 'submit']);
+
+
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/students', [AdminController::class, 'students']);
+    });
 });

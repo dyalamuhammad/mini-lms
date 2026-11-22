@@ -87,3 +87,17 @@ export type Assignment = {
   submission_text?: string | null;
   submitted_at?: string | null;
 };
+
+export type AdminStats = {
+  students: number;
+  courses: number;
+  enrollments: number;
+  completed_enrollments: number;
+};
+
+export type AdminStudent = {
+  id: number;
+  name: string;
+  email: string;
+  courses: { title: string; status: string; percentage: number }[];
+};
