@@ -13,6 +13,7 @@ Portfolio project: platform belajar online sederhana dengan arsitektur frontend 
 - Learning module: kurikulum, video, materi markdown, prev/next, tandai selesai, resume dari lesson terakhir
 - Progress tracking otomatis per course
 - Assignment: daftar, detail, submit jawaban teks
+- Role-based access control: panel admin untuk statistik dan progress student
 
 ## Tech Stack
 
@@ -69,6 +70,7 @@ Buka http://localhost:3000
 | Role    | Email                  | Password |
 | ------- | ---------------------- | -------- |
 | Student | student@learnpath.test | password |
+| Admin   | admin@learnpath.test   | password |
 
 ## Endpoint Utama
 
@@ -99,7 +101,6 @@ Buka http://localhost:3000
 
 ## Keterbatasan (di luar scope MVP)
 
-- Panel admin/instruktur (kolom `role` sudah disiapkan).
 - Upload file, sertifikat, pembayaran.
 - Token disimpan di localStorage; untuk produksi sebaiknya cookie httpOnly.
 - Belum ada deployment.
