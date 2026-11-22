@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\LearningController;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -21,4 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/courses/{course}/progress', [LearningController::class, 'progress']);
     Route::get('/lessons/{lesson}', [LearningController::class, 'lesson']);
     Route::post('/lessons/{lesson}/complete', [LearningController::class, 'complete']);
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
