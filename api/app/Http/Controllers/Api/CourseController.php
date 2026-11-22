@@ -25,6 +25,7 @@ class CourseController extends Controller
     public function show(Request $request, string $slug)
     {
         $course = Course::with(['category', 'instructor', 'enrollments' => fn($q) => $q->where('user_id', $request->user()->id)])
+            ->where('status', 'published')
             ->withCount(['modules', 'lessons'])
             ->where('slug', $slug)
             ->firstOrFail();
@@ -48,6 +49,7 @@ class CourseController extends Controller
 
     public function enroll(Request $request, Course $course)
     {
+        abort_unless($course->status === 'published', 404);
         $enrollment = Enrollment::firstOrCreate(
             ['user_id' => $request->user()->id, 'course_id' => $course->id],
             ['status' => 'active']

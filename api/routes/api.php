@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Models\Category;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\AdminCourseController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -41,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin,instructor')->prefix('admin')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);
         Route::get('/students', [AdminController::class, 'students']);
+        Route::apiResource('courses', AdminCourseController::class);
     });
 
     Route::get('/courses/{course}/certificate', [LearningController::class, 'certificate']);

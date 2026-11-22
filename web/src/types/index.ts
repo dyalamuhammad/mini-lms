@@ -110,3 +110,23 @@ export type Certificate = {
   completed_at: string;
   certificate_no: string;
 };
+
+export type CourseInput = {
+  title: string;
+  category_id: number | "";
+  description: string;
+  thumbnail: string | null;
+  level: string;
+  status: string;
+};
+
+export type AdminCourse = {
+  id: number;
+  title: string;
+  status: string;
+  level: string;
+  category: string | null;
+  modules_count: number;
+  lessons_count: number;
+  enrollments_count: number;
+};

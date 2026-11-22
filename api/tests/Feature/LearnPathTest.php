@@ -141,4 +141,23 @@ class LearnPathTest extends TestCase
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.id', $a->id);
     }
+
+    public function test_instructor_cannot_edit_others_course_and_course_with_students_cannot_be_deleted(): void
+    {
+        $course = $this->makeCourse(); // instructor = admin factory user
+        $intruder = User::factory()->create(['role' => 'instructor']);
+
+        Sanctum::actingAs($intruder);
+        $this->putJson("/api/admin/courses/{$course->id}", [
+            'title' => 'Hack',
+            'category_id' => $course->category_id,
+            'description' => 'deskripsi panjang',
+            'level' => 'beginner',
+            'status' => 'published',
+        ])->assertStatus(403);
+
+        $this->enrolledStudent($course);
+        Sanctum::actingAs(User::find($course->instructor_id));
+        $this->deleteJson("/api/admin/courses/{$course->id}")->assertStatus(409);
+    }
 }
