@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import ThemeToggle from "./ThemeToggle";
 
 const menus = [
   { href: "/dashboard", label: "Dashboard" },
@@ -67,6 +68,7 @@ export default function Sidebar({
         <div className="border-t border-blue-900 p-4">
           <p className="truncate text-sm font-medium">{user?.name}</p>
           <p className="truncate text-xs text-blue-300">{user?.email}</p>
+          <ThemeToggle className="mt-3 block text-sm text-blue-200 hover:text-white" />
           <button
             onClick={logout}
             className="mt-3 text-sm text-blue-200 hover:text-white"

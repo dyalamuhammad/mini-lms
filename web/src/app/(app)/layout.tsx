@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Sidebar from "@/components/Sidebar";
 import Loading from "@/components/Loading";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -37,6 +38,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             ☰
           </button>
           <span className="font-bold text-blue-950">LearnPath</span>
+          <ThemeToggle className="ml-auto text-sm text-slate-600" />
         </header>
 
         <main className="p-4 sm:p-8">{children}</main>
