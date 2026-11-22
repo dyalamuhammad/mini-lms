@@ -82,6 +82,14 @@ export default function LearnPage() {
             {progress.completed_lessons}/{progress.total_lessons} lesson ·{" "}
             {progress.percentage}%
           </p>
+          {progress.percentage === 100 && (
+            <Link
+              href={`/certificate/${courseId}`}
+              className="mt-3 inline-block rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            >
+              🎓 Lihat Sertifikat
+            </Link>
+          )}
         </div>
       </div>
 

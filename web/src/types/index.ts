@@ -101,3 +101,12 @@ export type AdminStudent = {
   email: string;
   courses: { title: string; status: string; percentage: number }[];
 };
+
+export type Certificate = {
+  student: string;
+  course: string;
+  instructor: string | null;
+  duration: number;
+  completed_at: string;
+  certificate_no: string;
+};

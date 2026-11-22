@@ -27,8 +27,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-slate-100">
       <Sidebar open={open} onClose={() => setOpen(false)} />
 
-      <div className="lg:pl-64">
-        <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
+      <div className="lg:pl-64 print:pl-0">
+        <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 lg:hidden print:hidden">
           <button
             onClick={() => setOpen(true)}
             aria-label="Buka menu"

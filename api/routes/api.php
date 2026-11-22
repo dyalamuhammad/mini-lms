@@ -42,4 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);
         Route::get('/students', [AdminController::class, 'students']);
     });
+
+    Route::get('/courses/{course}/certificate', [LearningController::class, 'certificate']);
 });

@@ -105,4 +105,28 @@ class LearningController extends Controller
             'Kamu belum terdaftar di course ini.'
         );
     }
+
+    public function certificate(Request $request, Course $course)
+    {
+        $user = $request->user();
+        $this->ensureEnrolled($user->id, $course->id);
+
+        $progress = $this->progress->forCourse($user->id, $course);
+
+        abort_unless($progress['percentage'] === 100, 403, 'Selesaikan semua lesson untuk mendapatkan sertifikat.');
+
+        $enrollment = Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->first();
+        $completedAt = LessonProgress::where('user_id', $user->id)
+            ->whereIn('lesson_id', $course->lessons()->pluck('lessons.id'))
+            ->max('completed_at');
+
+        return response()->json(['data' => [
+            'student' => $user->name,
+            'course' => $course->title,
+            'instructor' => $course->instructor?->name,
+            'duration' => $course->duration,
+            'completed_at' => $completedAt,
+            'certificate_no' => sprintf('LP-%04d-%04d-%04d', $course->id, $user->id, $enrollment->id),
+        ]]);
+    }
 }
