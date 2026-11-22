@@ -44,3 +44,35 @@ export type Course = {
 };
 
 export type Category = { id: number; name: string };
+
+export type Progress = {
+  total_lessons: number;
+  completed_lessons: number;
+  percentage: number;
+  completed_lesson_ids: number[];
+};
+
+export type Curriculum = {
+  course: { id: number; title: string; slug: string };
+  modules: {
+    id: number;
+    title: string;
+    lessons: { id: number; title: string; duration: number }[];
+  }[];
+  progress: Progress;
+  last_lesson_id: number | null;
+};
+
+export type LessonDetail = {
+  id: number;
+  title: string;
+  description: string | null;
+  content: string | null;
+  video_url: string | null;
+  duration: number;
+  module: string;
+  course: { id: number; title: string; slug: string };
+  is_completed: boolean;
+  prev_lesson_id: number | null;
+  next_lesson_id: number | null;
+};
