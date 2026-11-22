@@ -14,6 +14,21 @@ Portfolio project: platform belajar online sederhana dengan arsitektur frontend 
 - Progress tracking otomatis per course
 - Assignment: daftar, detail, submit jawaban teks
 - Role-based access control: panel admin untuk statistik dan progress student
+- RBAC tiga role (student, instructor, admin) dengan pembatasan data per instructor
+
+## Screenshots
+
+| Dashboard                                    | Course Catalog                           |
+| -------------------------------------------- | ---------------------------------------- |
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Catalog](docs/screenshots/catalog.png) |
+
+| Learning                                   | Assignment                                     |
+| ------------------------------------------ | ---------------------------------------------- |
+| ![Learning](docs/screenshots/learning.png) | ![Assignment](docs/screenshots/assignment.png) |
+
+| Admin Panel                          | Mobile                                 |
+| ------------------------------------ | -------------------------------------- |
+| ![Admin](docs/screenshots/admin.png) | ![Mobile](docs/screenshots/mobile.png) |
 
 ## Tech Stack
 
@@ -105,3 +120,12 @@ Buka http://localhost:3000
 - Upload file, sertifikat, pembayaran.
 - Token disimpan di localStorage; untuk produksi sebaiknya cookie httpOnly.
 - Belum ada deployment.
+
+## Testing
+
+```bash
+cd api
+php artisan test
+```
+
+Test memakai database terpisah `learnpath_test` (buat database kosong tersebut dan atur di `phpunit.xml`).
