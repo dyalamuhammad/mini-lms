@@ -8,6 +8,7 @@ const menus = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/courses", label: "Course Catalog" },
   { href: "/my-courses", label: "My Courses" },
+  { href: "/assignments", label: "Assignments" },
 ];
 
 export default function Sidebar({

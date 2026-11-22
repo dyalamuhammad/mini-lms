@@ -76,3 +76,14 @@ export type LessonDetail = {
   prev_lesson_id: number | null;
   next_lesson_id: number | null;
 };
+
+export type Assignment = {
+  id: number;
+  title: string;
+  course: string;
+  deadline: string | null;
+  status: "pending" | "submitted";
+  description?: string;
+  submission_text?: string | null;
+  submitted_at?: string | null;
+};

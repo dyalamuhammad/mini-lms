@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Models\Category;
+use App\Http\Controllers\Api\AssignmentController;
 
 Route::post('/login', [AuthController::class, 'login']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -28,4 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/categories', fn() => ['data' => Category::select('id', 'name')->get()]);
+
+
+    Route::get('/my-assignments', [AssignmentController::class, 'index']);
+    Route::get('/assignments/{assignment}', [AssignmentController::class, 'show']);
+    Route::post('/assignments/{assignment}/submit', [AssignmentController::class, 'submit']);
 });
