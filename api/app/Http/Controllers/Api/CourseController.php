@@ -17,7 +17,7 @@ class CourseController extends Controller
             ->when($request->search, fn($q, $s) => $q->where('title', 'like', "%$s%"))
             ->when($request->category_id, fn($q, $c) => $q->where('category_id', $c))
             ->latest()
-            ->get();
+            ->paginate(6);
 
         return CourseResource::collection($courses);
     }

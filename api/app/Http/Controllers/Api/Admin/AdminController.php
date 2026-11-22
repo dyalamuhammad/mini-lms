@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\User;
 use App\Services\ProgressService;
+use App\Support\Paginated;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -43,21 +44,23 @@ class AdminController extends Controller
         $ids = $this->courseIds($request);
         $isAdmin = $request->user()->role === 'admin';
 
-        $students = User::where('role', 'student')
+        $page = User::where('role', 'student')
             ->with(['enrollments' => fn($q) => $q->whereIn('course_id', $ids)->with('course')])
             ->when(! $isAdmin, fn($q) => $q->whereHas('enrollments', fn($e) => $e->whereIn('course_id', $ids)))
-            ->get()
-            ->map(fn($u) => [
-                'id' => $u->id,
-                'name' => $u->name,
-                'email' => $u->email,
-                'courses' => $u->enrollments->map(fn($e) => [
-                    'title' => $e->course->title,
-                    'status' => $e->status,
-                    'percentage' => $this->progress->forCourse($u->id, $e->course)['percentage'],
-                ])->values(),
-            ]);
+            ->orderBy('name')
+            ->paginate(5);
 
-        return response()->json(['data' => $students]);
+        $students = $page->through(fn($u) => [
+            'id' => $u->id,
+            'name' => $u->name,
+            'email' => $u->email,
+            'courses' => $u->enrollments->map(fn($e) => [
+                'title' => $e->course->title,
+                'status' => $e->status,
+                'percentage' => $this->progress->forCourse($u->id, $e->course)['percentage'],
+            ])->values(),
+        ]);
+
+        return response()->json(['data' => $students->items(), 'meta' => Paginated::meta($page)]);
     }
 }

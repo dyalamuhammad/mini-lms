@@ -6,14 +6,33 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import Loading from "@/components/Loading";
 import ProgressBar from "@/components/ProgressBar";
-import type { AdminStats, AdminStudent } from "@/types";
+import type { AdminStats, AdminStudent, PageMeta } from "@/types";
 import Link from "next/link";
+import Pagination from "@/components/Pagination";
 
 export default function AdminPage() {
   const { user } = useAuth();
   const router = useRouter();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [students, setStudents] = useState<AdminStudent[] | null>(null);
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState<PageMeta | null>(null);
+
+  // pisahkan fetch stats (sekali) dan students (bergantung page)
+  useEffect(() => {
+    if (user && !["admin", "instructor"].includes(user.role)) {
+      router.replace("/dashboard");
+      return;
+    }
+    api.get("/admin/stats").then((r) => setStats(r.data.data));
+  }, [user, router]);
+
+  useEffect(() => {
+    api.get("/admin/students", { params: { page } }).then((r) => {
+      setStudents(r.data.data);
+      setMeta(r.data.meta);
+    });
+  }, [page]);
 
   useEffect(() => {
     if (user && !["admin", "instructor"].includes(user.role)) {
@@ -82,6 +101,7 @@ export default function AdminPage() {
             )}
           </div>
         ))}
+        {meta && <Pagination meta={meta} onChange={setPage} />}
       </section>
     </div>
   );

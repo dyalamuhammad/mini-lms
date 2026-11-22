@@ -139,3 +139,9 @@ export type AdminLesson = {
   duration: number;
 };
 export type AdminModule = { id: number; title: string; lessons: AdminLesson[] };
+
+export type PageMeta = {
+  current_page: number;
+  last_page: number;
+  total: number;
+};

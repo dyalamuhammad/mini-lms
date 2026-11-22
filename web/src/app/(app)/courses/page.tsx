@@ -5,12 +5,21 @@ import { api } from "@/lib/api";
 import CourseCard from "@/components/CourseCard";
 import type { Category, Course } from "@/types";
 import Loading from "@/components/Loading";
+import Pagination from "@/components/Pagination";
+import type { PageMeta } from "@/types";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState<PageMeta | null>(null);
+
+  // reset ke halaman 1 saat filter berubah
+  useEffect(() => {
+    setPage(1);
+  }, [search, categoryId]);
 
   useEffect(() => {
     api.get("/categories").then((r) => setCategories(r.data.data));
@@ -23,12 +32,16 @@ export default function CoursesPage() {
           params: {
             search: search || undefined,
             category_id: categoryId || undefined,
+            page,
           },
         })
-        .then((r) => setCourses(r.data.data));
+        .then((r) => {
+          setCourses(r.data.data);
+          setMeta(r.data.meta);
+        });
     }, 300); // debounce agar tidak request di setiap ketikan
     return () => clearTimeout(t);
-  }, [search, categoryId]);
+  }, [search, categoryId, page]);
 
   return (
     <div className="space-y-6">
@@ -72,6 +85,7 @@ export default function CoursesPage() {
           ))}
         </div>
       )}
+      {meta && <Pagination meta={meta} onChange={setPage} />}
     </div>
   );
 }

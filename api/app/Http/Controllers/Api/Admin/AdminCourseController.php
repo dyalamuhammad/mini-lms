@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
+use App\Support\Paginated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,23 +15,24 @@ class AdminCourseController extends Controller
     {
         $user = $request->user();
 
-        $courses = Course::with('category:id,name')
+        $page = Course::with('category:id,name')
             ->withCount(['modules', 'lessons', 'enrollments'])
             ->when($user->role !== 'admin', fn($q) => $q->where('instructor_id', $user->id))
             ->latest()
-            ->get()
-            ->map(fn($c) => [
-                'id' => $c->id,
-                'title' => $c->title,
-                'status' => $c->status,
-                'level' => $c->level,
-                'category' => $c->category?->name,
-                'modules_count' => $c->modules_count,
-                'lessons_count' => $c->lessons_count,
-                'enrollments_count' => $c->enrollments_count,
-            ]);
+            ->paginate(5);
 
-        return response()->json(['data' => $courses]);
+        $courses = $page->through(fn($c) => [
+            'id' => $c->id,
+            'title' => $c->title,
+            'status' => $c->status,
+            'level' => $c->level,
+            'category' => $c->category?->name,
+            'modules_count' => $c->modules_count,
+            'lessons_count' => $c->lessons_count,
+            'enrollments_count' => $c->enrollments_count,
+        ]);
+
+        return response()->json(['data' => $courses->items(), 'meta' => Paginated::meta($page)]);
     }
 
     public function show(Request $request, Course $course)

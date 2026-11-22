@@ -1,21 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import Loading from "@/components/Loading";
 import type { AdminCourse } from "@/types";
+import Pagination from "@/components/Pagination";
+import type { PageMeta } from "@/types";
 
 export default function AdminCoursesPage() {
   const [items, setItems] = useState<AdminCourse[] | null>(null);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState<PageMeta | null>(null);
 
-  const load = () =>
-    api.get("/admin/courses").then((r) => setItems(r.data.data));
-
+  const load = useCallback(
+    () =>
+      api.get("/admin/courses", { params: { page } }).then((r) => {
+        setItems(r.data.data);
+        setMeta(r.data.meta);
+      }),
+    [page],
+  );
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const remove = async (c: AdminCourse) => {
     if (!confirm(`Hapus course "${c.title}"?`)) return;
@@ -106,6 +115,7 @@ export default function AdminCoursesPage() {
             ))}
           </tbody>
         </table>
+        {meta && <Pagination meta={meta} onChange={setPage} />}
       </div>
     </div>
   );
