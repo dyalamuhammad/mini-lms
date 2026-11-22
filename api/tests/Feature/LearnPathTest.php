@@ -177,4 +177,17 @@ class LearnPathTest extends TestCase
         $lesson = $course->lessons()->first();
         $this->deleteJson("/api/admin/lessons/{$lesson->id}")->assertStatus(409);
     }
+    public function test_instructor_manages_assignments_only_in_own_course(): void
+    {
+        $course = $this->makeCourse();
+        $owner = User::find($course->instructor_id);
+        $payload = ['title' => 'Tugas 1', 'description' => 'Deskripsi tugas panjang', 'deadline' => now()->addDays(3)->toDateTimeString()];
+
+        Sanctum::actingAs(User::factory()->create(['role' => 'instructor']));
+        $this->postJson("/api/admin/courses/{$course->id}/assignments", $payload)->assertStatus(403);
+
+        Sanctum::actingAs($owner);
+        $this->postJson("/api/admin/courses/{$course->id}/assignments", $payload)->assertStatus(201);
+        $this->assertDatabaseCount('assignments', 1);
+    }
 }

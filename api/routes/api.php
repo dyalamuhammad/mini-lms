@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\AdminCourseController;
 use App\Http\Controllers\Api\Admin\CurriculumController;
+use App\Http\Controllers\Api\Admin\AdminAssignmentController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -52,6 +53,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/modules/{module}/lessons', [CurriculumController::class, 'storeLesson']);
         Route::put('/lessons/{lesson}', [CurriculumController::class, 'updateLesson']);
         Route::delete('/lessons/{lesson}', [CurriculumController::class, 'destroyLesson']);
+
+
+        Route::get('/courses/{course}/assignments', [AdminAssignmentController::class, 'index']);
+        Route::post('/courses/{course}/assignments', [AdminAssignmentController::class, 'store']);
+        Route::put('/assignments/{assignment}', [AdminAssignmentController::class, 'update']);
+        Route::delete('/assignments/{assignment}', [AdminAssignmentController::class, 'destroy']);
     });
 
     Route::get('/courses/{course}/certificate', [LearningController::class, 'certificate']);

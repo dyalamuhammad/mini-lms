@@ -99,6 +99,12 @@ export default function AdminCoursesPage() {
                     Kurikulum
                   </Link>
                   <Link
+                    href={`/admin/courses/${c.id}/assignments`}
+                    className="text-blue-700 hover:underline"
+                  >
+                    Tugas
+                  </Link>
+                  <Link
                     href={`/admin/courses/${c.id}/edit`}
                     className="text-blue-700 hover:underline"
                   >

@@ -145,3 +145,11 @@ export type PageMeta = {
   last_page: number;
   total: number;
 };
+
+export type AdminAssignment = {
+  id: number;
+  title: string;
+  description: string;
+  deadline: string | null;
+  submissions_count: number;
+};
