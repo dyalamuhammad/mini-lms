@@ -190,4 +190,21 @@ class LearnPathTest extends TestCase
         $this->postJson("/api/admin/courses/{$course->id}/assignments", $payload)->assertStatus(201);
         $this->assertDatabaseCount('assignments', 1);
     }
+    public function test_only_owner_can_read_assignment_submissions(): void
+    {
+        $course = $this->makeCourse();
+        $owner = User::find($course->instructor_id);
+        $assignment = $course->assignments()->create(['title' => 'T', 'description' => 'Deskripsi panjang']);
+
+        $student = User::factory()->create(['role' => 'student']);
+        $assignment->submissions()->create(['user_id' => $student->id, 'submission_text' => 'Jawaban saya']);
+
+        Sanctum::actingAs(User::factory()->create(['role' => 'instructor']));
+        $this->getJson("/api/admin/assignments/{$assignment->id}/submissions")->assertStatus(403);
+
+        Sanctum::actingAs($owner);
+        $this->getJson("/api/admin/assignments/{$assignment->id}/submissions")
+            ->assertOk()
+            ->assertJsonCount(1, 'data.submissions');
+    }
 }

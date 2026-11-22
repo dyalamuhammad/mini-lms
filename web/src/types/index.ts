@@ -153,3 +153,11 @@ export type AdminAssignment = {
   deadline: string | null;
   submissions_count: number;
 };
+
+export type AdminSubmission = {
+  id: number;
+  student: string;
+  email: string;
+  submission_text: string;
+  submitted_at: string;
+};

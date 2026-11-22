@@ -99,6 +99,12 @@ export default function AdminAssignmentsPage() {
                 </p>
               </div>
               <span className="space-x-3 text-sm">
+                <Link
+                  href={`/admin/assignments/${a.id}/submissions`}
+                  className="text-blue-700 hover:underline"
+                >
+                  Lihat jawaban
+                </Link>
                 <button
                   onClick={() => {
                     setEditing(a.id);

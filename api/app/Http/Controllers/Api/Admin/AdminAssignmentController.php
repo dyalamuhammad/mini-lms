@@ -71,4 +71,26 @@ class AdminAssignmentController extends Controller
             'Ini bukan course milikmu.'
         );
     }
+    public function submissions(Request $request, Assignment $assignment)
+    {
+        $this->authorizeCourse($request, $assignment->course);
+
+        $submissions = $assignment->submissions()
+            ->with('user:id,name,email')
+            ->latest('submitted_at')
+            ->get()
+            ->map(fn($s) => [
+                'id' => $s->id,
+                'student' => $s->user->name,
+                'email' => $s->user->email,
+                'submission_text' => $s->submission_text,
+                'submitted_at' => $s->submitted_at,
+            ]);
+
+        return response()->json(['data' => [
+            'assignment' => $assignment->only('id', 'title', 'deadline'),
+            'course' => $assignment->course->only('id', 'title'),
+            'submissions' => $submissions,
+        ]]);
+    }
 }
