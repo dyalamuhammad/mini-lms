@@ -84,6 +84,12 @@ export default function AdminCoursesPage() {
                 <td className="p-4 text-slate-700">{c.enrollments_count}</td>
                 <td className="space-x-3 p-4 text-right">
                   <Link
+                    href={`/admin/courses/${c.id}/curriculum`}
+                    className="text-blue-700 hover:underline"
+                  >
+                    Kurikulum
+                  </Link>
+                  <Link
                     href={`/admin/courses/${c.id}/edit`}
                     className="text-blue-700 hover:underline"
                   >

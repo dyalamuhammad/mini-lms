@@ -160,4 +160,21 @@ class LearnPathTest extends TestCase
         Sanctum::actingAs(User::find($course->instructor_id));
         $this->deleteJson("/api/admin/courses/{$course->id}")->assertStatus(409);
     }
+
+    public function test_instructor_can_add_lesson_and_duration_syncs_but_cannot_delete_when_enrolled(): void
+    {
+        $course = $this->makeCourse();
+        $owner = User::find($course->instructor_id);
+        $module = $course->modules()->first();
+
+        Sanctum::actingAs($owner);
+        $this->postJson("/api/admin/modules/{$module->id}/lessons", ['title' => 'Baru', 'duration' => 15])
+            ->assertStatus(201);
+        $this->assertEquals(15, $course->fresh()->duration);
+
+        $this->enrolledStudent($course);
+        Sanctum::actingAs($owner);
+        $lesson = $course->lessons()->first();
+        $this->deleteJson("/api/admin/lessons/{$lesson->id}")->assertStatus(409);
+    }
 }

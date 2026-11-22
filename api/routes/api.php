@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\AdminCourseController;
+use App\Http\Controllers\Api\Admin\CurriculumController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -43,6 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);
         Route::get('/students', [AdminController::class, 'students']);
         Route::apiResource('courses', AdminCourseController::class);
+
+        Route::get('/courses/{course}/curriculum', [CurriculumController::class, 'show']);
+        Route::post('/courses/{course}/modules', [CurriculumController::class, 'storeModule']);
+        Route::put('/modules/{module}', [CurriculumController::class, 'updateModule']);
+        Route::delete('/modules/{module}', [CurriculumController::class, 'destroyModule']);
+        Route::post('/modules/{module}/lessons', [CurriculumController::class, 'storeLesson']);
+        Route::put('/lessons/{lesson}', [CurriculumController::class, 'updateLesson']);
+        Route::delete('/lessons/{lesson}', [CurriculumController::class, 'destroyLesson']);
     });
 
     Route::get('/courses/{course}/certificate', [LearningController::class, 'certificate']);

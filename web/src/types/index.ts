@@ -130,3 +130,12 @@ export type AdminCourse = {
   lessons_count: number;
   enrollments_count: number;
 };
+
+export type AdminLesson = {
+  id: number;
+  title: string;
+  content: string | null;
+  video_url: string | null;
+  duration: number;
+};
+export type AdminModule = { id: number; title: string; lessons: AdminLesson[] };
