@@ -5,12 +5,15 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
 import { isStaff } from "@/lib/roles";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
 
 const menus = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/courses", label: "Course Catalog" },
   { href: "/my-courses", label: "My Courses" },
   { href: "/assignments", label: "Assignments" },
+  { href: "/notifications", label: "Notifikasi" },
 ];
 
 export default function Sidebar({
@@ -23,6 +26,17 @@ export default function Sidebar({
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
+  const [notifCount, setNotifCount] = useState(0);
+
+  // refresh setiap pindah halaman
+  useEffect(() => {
+    if (user?.role === "student") {
+      api
+        .get("/notifications")
+        .then((r) => setNotifCount(r.data.data.length))
+        .catch(() => {});
+    }
+  }, [user, pathname]);
   const staffMenus = [
     {
       href: "/admin",
@@ -63,6 +77,11 @@ export default function Sidebar({
                 }`}
               >
                 {m.label}
+                {m.href === "/notifications" && notifCount > 0 && (
+                  <span className="ml-2 rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
+                    {notifCount}
+                  </span>
+                )}
               </Link>
             );
           })}

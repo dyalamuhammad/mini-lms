@@ -270,4 +270,21 @@ class LearnPathTest extends TestCase
         $this->getJson('/api/admin/courses?search=Test')->assertOk()->assertJsonCount(1, 'data');
         $this->getJson('/api/admin/courses?search=zzz')->assertOk()->assertJsonCount(0, 'data');
     }
+    public function test_notifications_show_near_deadline_assignment_until_submitted(): void
+    {
+        $course = $this->makeCourse();
+        $assignment = $course->assignments()->create([
+            'title' => 'Tugas Dekat',
+            'description' => 'Deskripsi panjang',
+            'deadline' => now()->addDay(),
+        ]);
+        $this->enrolledStudent($course);
+
+        $this->getJson('/api/notifications')->assertOk()->assertJsonCount(1, 'data');
+
+        $this->postJson("/api/assignments/{$assignment->id}/submit", ['submission_text' => 'Jawaban saya sudah selesai'])
+            ->assertStatus(201);
+
+        $this->getJson('/api/notifications')->assertJsonCount(0, 'data');
+    }
 }

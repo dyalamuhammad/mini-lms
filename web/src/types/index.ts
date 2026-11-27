@@ -177,3 +177,11 @@ export type Review = {
   created_at: string;
   is_mine: boolean;
 };
+
+export type Notif = {
+  id: string;
+  type: "deadline" | "overdue" | "completed";
+  message: string;
+  link: string;
+  time: string;
+};
