@@ -49,6 +49,7 @@ class CourseController extends Controller
 
     public function enroll(Request $request, Course $course)
     {
+        abort_unless($request->user()->role === 'student', 403, 'Hanya student yang bisa enroll.');
         abort_unless($course->status === 'published', 404);
         $enrollment = Enrollment::firstOrCreate(
             ['user_id' => $request->user()->id, 'course_id' => $course->id],

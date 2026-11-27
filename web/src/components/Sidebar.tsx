@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import { isStaff } from "@/lib/roles";
 
 const menus = [
   { href: "/dashboard", label: "Dashboard" },
@@ -21,16 +22,15 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const isStaff = user?.role === "admin" || user?.role === "instructor";
-  const items = isStaff
-    ? [
-        ...menus,
-        {
-          href: "/admin",
-          label: user?.role === "admin" ? "Admin Panel" : "Instructor Panel",
-        },
-      ]
-    : menus;
+
+  const staffMenus = [
+    {
+      href: "/admin",
+      label: user?.role === "admin" ? "Admin Panel" : "Instructor Panel",
+    },
+    { href: "/admin/courses", label: "Kelola Course" },
+  ];
+  const items = isStaff(user?.role) ? staffMenus : menus;
 
   return (
     <>
@@ -49,7 +49,10 @@ export default function Sidebar({
 
         <nav className="flex-1 space-y-1 px-3">
           {items.map((m) => {
-            const active = pathname.startsWith(m.href);
+            const active =
+              m.href === "/admin"
+                ? pathname === "/admin"
+                : pathname.startsWith(m.href);
             return (
               <Link
                 key={m.href}

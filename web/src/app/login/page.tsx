@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { homePath } from "@/lib/roles";
 
 export default function LoginPage() {
   const { user, loading, login } = useAuth();
@@ -20,9 +21,10 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setSubmitting(true);
+
     try {
-      await login(email, password);
-      router.replace("/dashboard");
+      const u = await login(email, password);
+      if (u) router.replace(homePath(u.role));
     } catch (err: any) {
       setError(err.response?.data?.message ?? "Gagal login, coba lagi.");
     } finally {

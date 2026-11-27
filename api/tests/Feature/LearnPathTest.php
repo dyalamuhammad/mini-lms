@@ -207,4 +207,11 @@ class LearnPathTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'data.submissions');
     }
+    public function test_staff_cannot_enroll(): void
+    {
+        $course = $this->makeCourse();
+        Sanctum::actingAs(User::factory()->create(['role' => 'instructor']));
+
+        $this->postJson("/api/courses/{$course->id}/enroll")->assertStatus(403);
+    }
 }
