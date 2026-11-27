@@ -214,4 +214,24 @@ class LearnPathTest extends TestCase
 
         $this->postJson("/api/courses/{$course->id}/enroll")->assertStatus(403);
     }
+    public function test_user_can_update_name_and_change_password(): void
+    {
+        $user = User::factory()->create(['name' => 'Lama']);
+        Sanctum::actingAs($user);
+
+        $this->putJson('/api/profile', ['name' => 'Baru'])->assertOk();
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Baru']);
+
+        $this->putJson('/api/password', [
+            'current_password' => 'salah',
+            'password' => 'passwordbaru',
+            'password_confirmation' => 'passwordbaru',
+        ])->assertStatus(422);
+
+        $this->putJson('/api/password', [
+            'current_password' => 'password',
+            'password' => 'passwordbaru',
+            'password_confirmation' => 'passwordbaru',
+        ])->assertOk();
+    }
 }

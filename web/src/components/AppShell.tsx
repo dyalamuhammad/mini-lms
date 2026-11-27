@@ -18,9 +18,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   const pathname = usePathname();
   const staff = isStaff(user?.role);
-  const wrongArea = staff
-    ? !pathname.startsWith("/admin")
-    : pathname.startsWith("/admin");
+  const wrongArea = pathname.startsWith("/profile")
+    ? false
+    : staff
+      ? !pathname.startsWith("/admin")
+      : pathname.startsWith("/admin");
 
   useEffect(() => {
     if (!loading && !user) router.replace("/login");

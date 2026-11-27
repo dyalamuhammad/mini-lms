@@ -69,7 +69,13 @@ export default function Sidebar({
         </nav>
 
         <div className="border-t border-blue-900 p-4">
-          <p className="truncate text-sm font-medium">{user?.name}</p>
+          <Link
+            href="/profile"
+            onClick={onClose}
+            className="block truncate text-sm font-medium hover:underline"
+          >
+            {user?.name}
+          </Link>{" "}
           <p className="truncate text-xs text-blue-300">{user?.email}</p>
           <ThemeToggle className="mt-3 block text-sm text-blue-200 hover:text-white" />
           <button
