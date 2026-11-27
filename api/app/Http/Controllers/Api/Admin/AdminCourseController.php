@@ -18,6 +18,8 @@ class AdminCourseController extends Controller
         $page = Course::with('category:id,name')
             ->withCount(['modules', 'lessons', 'enrollments'])
             ->when($user->role !== 'admin', fn($q) => $q->where('instructor_id', $user->id))
+            ->withCount(['modules', 'lessons', 'enrollments', 'reviews'])
+            ->withAvg('reviews', 'rating')
             ->latest()
             ->paginate(5);
 
@@ -30,6 +32,8 @@ class AdminCourseController extends Controller
             'modules_count' => $c->modules_count,
             'lessons_count' => $c->lessons_count,
             'enrollments_count' => $c->enrollments_count,
+            'rating' => round((float) $c->reviews_avg_rating, 1),
+            'reviews_count' => $c->reviews_count,
         ]);
 
         return response()->json(['data' => $courses->items(), 'meta' => Paginated::meta($page)]);
@@ -92,5 +96,25 @@ class AdminCourseController extends Controller
         }
 
         return $slug;
+    }
+    public function reviews(Request $request, Course $course)
+    {
+        $this->authorizeCourse($request, $course);
+
+        $reviews = $course->reviews()->with('user:id,name')->latest()->get()
+            ->map(fn($r) => [
+                'id' => $r->id,
+                'user' => $r->user->name,
+                'rating' => $r->rating,
+                'comment' => $r->comment,
+                'created_at' => $r->created_at,
+            ]);
+
+        return response()->json(['data' => [
+            'course' => $course->only('id', 'title'),
+            'average' => round((float) $course->reviews()->avg('rating'), 1),
+            'count' => $reviews->count(),
+            'reviews' => $reviews,
+        ]]);
     }
 }

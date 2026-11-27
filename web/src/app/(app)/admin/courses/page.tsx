@@ -7,6 +7,7 @@ import Loading from "@/components/Loading";
 import type { AdminCourse } from "@/types";
 import Pagination from "@/components/Pagination";
 import type { PageMeta } from "@/types";
+import Stars from "@/components/Stars";
 
 export default function AdminCoursesPage() {
   const [items, setItems] = useState<AdminCourse[] | null>(null);
@@ -68,6 +69,7 @@ export default function AdminCoursesPage() {
               <th className="p-4">Status</th>
               <th className="p-4">Modul / Lesson</th>
               <th className="p-4">Student</th>
+              <th className="p-4">Rating</th>
               <th className="p-4" />
             </tr>
           </thead>
@@ -91,6 +93,18 @@ export default function AdminCoursesPage() {
                   {c.modules_count} / {c.lessons_count}
                 </td>
                 <td className="p-4 text-slate-700">{c.enrollments_count}</td>
+                <td className="p-4 text-slate-700">
+                  {c.reviews_count > 0 ? (
+                    <Link
+                      href={`/admin/courses/${c.id}/reviews`}
+                      className="hover:underline"
+                    >
+                      <Stars value={c.rating} /> {c.rating} ({c.reviews_count})
+                    </Link>
+                  ) : (
+                    <span className="text-slate-400">-</span>
+                  )}
+                </td>
                 <td className="space-x-3 p-4 text-right">
                   <Link
                     href={`/admin/courses/${c.id}/curriculum`}

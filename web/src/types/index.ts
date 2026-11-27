@@ -131,6 +131,8 @@ export type AdminCourse = {
   modules_count: number;
   lessons_count: number;
   enrollments_count: number;
+  rating: number;
+  reviews_count: number;
 };
 
 export type AdminLesson = {
