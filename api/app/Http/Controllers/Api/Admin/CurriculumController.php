@@ -115,4 +115,39 @@ class CurriculumController extends Controller
     {
         $course->update(['duration' => $course->lessons()->sum('lessons.duration')]);
     }
+    public function moveModule(Request $request, Module $module)
+    {
+        $this->authorizeCourse($request, $module->course);
+        $dir = $request->validate(['direction' => ['required', 'in:up,down']])['direction'];
+
+        $this->swap(Module::where('course_id', $module->course_id), $module, $dir);
+
+        return response()->json(['message' => 'Urutan diperbarui.']);
+    }
+
+    public function moveLesson(Request $request, Lesson $lesson)
+    {
+        $this->authorizeCourse($request, $lesson->module->course);
+        $dir = $request->validate(['direction' => ['required', 'in:up,down']])['direction'];
+
+        $this->swap(Lesson::where('module_id', $lesson->module_id), $lesson, $dir);
+
+        return response()->json(['message' => 'Urutan diperbarui.']);
+    }
+
+    // cari tetangga lalu tukar nilai order
+    private function swap($siblings, $item, string $dir): void
+    {
+        $neighbor = $dir === 'up'
+            ? (clone $siblings)->where('order', '<', $item->order)->orderByDesc('order')->first()
+            : (clone $siblings)->where('order', '>', $item->order)->orderBy('order')->first();
+
+        if (! $neighbor) {
+            return; // sudah paling atas/bawah
+        }
+
+        [$a, $b] = [$item->order, $neighbor->order];
+        $item->update(['order' => $b]);
+        $neighbor->update(['order' => $a]);
+    }
 }

@@ -72,6 +72,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/assignments/{assignment}', [AdminAssignmentController::class, 'destroy']);
         Route::get('/assignments/{assignment}/submissions', [AdminAssignmentController::class, 'submissions']);
         Route::get('/courses/{course}/reviews', [AdminCourseController::class, 'reviews']);
+
+        Route::post('/modules/{module}/move', [CurriculumController::class, 'moveModule']);
+        Route::post('/lessons/{lesson}/move', [CurriculumController::class, 'moveLesson']);
     });
 
     Route::get('/courses/{course}/certificate', [LearningController::class, 'certificate']);

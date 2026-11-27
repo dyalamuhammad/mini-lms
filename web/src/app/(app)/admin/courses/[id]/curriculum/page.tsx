@@ -50,6 +50,11 @@ export default function CurriculumPage() {
       );
     }
   };
+  const move = (
+    type: "modules" | "lessons",
+    itemId: number,
+    direction: "up" | "down",
+  ) => run(() => api.post(`/admin/${type}/${itemId}/move`, { direction }));
 
   const addModule = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +109,23 @@ export default function CurriculumPage() {
           className="space-y-3 rounded-2xl bg-white p-5 shadow-sm"
         >
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-blue-950">{m.title}</h2>
+            <h2 className="flex items-center gap-2 font-semibold text-blue-950">
+              {m.title}
+              <button
+                onClick={() => move("modules", m.id, "up")}
+                aria-label="Naikkan modul"
+                className="text-xs text-slate-400 hover:text-slate-700"
+              >
+                ▲
+              </button>
+              <button
+                onClick={() => move("modules", m.id, "down")}
+                aria-label="Turunkan modul"
+                className="text-xs text-slate-400 hover:text-slate-700"
+              >
+                ▼
+              </button>
+            </h2>{" "}
             <button
               onClick={() =>
                 confirm(`Hapus modul "${m.title}"?`) &&
@@ -127,6 +148,20 @@ export default function CurriculumPage() {
                   <span className="text-slate-400">· {l.duration}m</span>
                 </span>
                 <span className="space-x-3">
+                  <button
+                    onClick={() => move("lessons", l.id, "up")}
+                    aria-label="Naikkan lesson"
+                    className="text-xs text-slate-400 hover:text-slate-700"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    onClick={() => move("lessons", l.id, "down")}
+                    aria-label="Turunkan lesson"
+                    className="text-xs text-slate-400 hover:text-slate-700"
+                  >
+                    ▼
+                  </button>
                   <button
                     onClick={() => {
                       setLessonForm({ moduleId: m.id, lessonId: l.id });

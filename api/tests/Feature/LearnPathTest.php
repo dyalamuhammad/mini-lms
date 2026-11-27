@@ -287,4 +287,16 @@ class LearnPathTest extends TestCase
 
         $this->getJson('/api/notifications')->assertJsonCount(0, 'data');
     }
+    public function test_instructor_can_reorder_lessons(): void
+    {
+        $course = $this->makeCourse();
+        Sanctum::actingAs(User::find($course->instructor_id));
+
+        $module = $course->modules()->first();
+        $first = $module->lessons()->orderBy('order')->first();
+
+        $this->postJson("/api/admin/lessons/{$first->id}/move", ['direction' => 'down'])->assertOk();
+
+        $this->assertEquals('Lesson 2', $module->lessons()->orderBy('order')->first()->title);
+    }
 }
