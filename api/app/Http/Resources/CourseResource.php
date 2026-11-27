@@ -29,6 +29,8 @@ class CourseResource extends JsonResource
             'category' => $this->category?->name,
             'instructor' => $this->instructor?->name,
             'is_enrolled' => (bool) $enrollment,
+            'rating' => round((float) $this->reviews_avg_rating, 1),
+            'reviews_count' => (int) $this->reviews_count,
         ];
     }
 }

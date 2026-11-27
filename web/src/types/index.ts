@@ -41,6 +41,8 @@ export type Course = {
   category: string | null;
   instructor: string | null;
   is_enrolled: boolean;
+  rating: number;
+  reviews_count: number;
 };
 
 export type Category = { id: number; name: string };
@@ -160,4 +162,13 @@ export type AdminSubmission = {
   email: string;
   submission_text: string;
   submitted_at: string;
+};
+
+export type Review = {
+  id: number;
+  user: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  is_mine: boolean;
 };

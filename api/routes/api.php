@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Admin\AdminCourseController;
 use App\Http\Controllers\Api\Admin\CurriculumController;
 use App\Http\Controllers\Api\Admin\AdminAssignmentController;
+use App\Http\Controllers\Api\ReviewController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -30,6 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/courses/{course}/curriculum', [LearningController::class, 'curriculum']);
     Route::get('/courses/{course}/progress', [LearningController::class, 'progress']);
+
+    Route::get('/courses/{course}/reviews', [ReviewController::class, 'index']);
+    Route::post('/courses/{course}/reviews', [ReviewController::class, 'store']);
+
     Route::get('/lessons/{lesson}', [LearningController::class, 'lesson']);
     Route::post('/lessons/{lesson}/complete', [LearningController::class, 'complete']);
 

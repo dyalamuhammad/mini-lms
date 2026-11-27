@@ -16,6 +16,7 @@ class CourseController extends Controller
             ->where('status', 'published')
             ->when($request->search, fn($q, $s) => $q->where('title', 'like', "%$s%"))
             ->when($request->category_id, fn($q, $c) => $q->where('category_id', $c))
+            ->withAvg('reviews', 'rating')->withCount('reviews')
             ->latest()
             ->paginate(6);
 
@@ -28,6 +29,7 @@ class CourseController extends Controller
             ->where('status', 'published')
             ->withCount(['modules', 'lessons'])
             ->where('slug', $slug)
+            ->withAvg('reviews', 'rating')->withCount('reviews')
             ->firstOrFail();
 
         return (new CourseResource($course))->additional([
@@ -42,6 +44,7 @@ class CourseController extends Controller
     {
         $courses = Course::with(['category', 'instructor', 'enrollments' => fn($q) => $q->where('user_id', $request->user()->id)])
             ->whereHas('enrollments', fn($q) => $q->where('user_id', $request->user()->id))
+            ->withAvg('reviews', 'rating')->withCount('reviews')
             ->get();
 
         return CourseResource::collection($courses);

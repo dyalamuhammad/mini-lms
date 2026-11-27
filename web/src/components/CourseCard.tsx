@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Course } from "@/types";
+import Stars from "./Stars";
 
 export default function CourseCard({ course }: { course: Course }) {
   return (
@@ -27,6 +28,12 @@ export default function CourseCard({ course }: { course: Course }) {
         <p className="mt-1 line-clamp-2 text-sm text-slate-500">
           {course.description}
         </p>
+        {course.reviews_count > 0 && (
+          <p className="mt-2 text-xs text-slate-500">
+            <Stars value={course.rating} /> {course.rating} (
+            {course.reviews_count})
+          </p>
+        )}
         <p className="mt-auto pt-3 text-xs text-slate-500">
           {course.instructor} · {course.duration} menit ·{" "}
           <span className="capitalize">{course.level}</span>

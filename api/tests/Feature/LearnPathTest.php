@@ -234,4 +234,17 @@ class LearnPathTest extends TestCase
             'password_confirmation' => 'passwordbaru',
         ])->assertOk();
     }
+    public function test_only_enrolled_student_can_review_and_review_is_updated_not_duplicated(): void
+    {
+        $course = $this->makeCourse();
+        Sanctum::actingAs(User::factory()->create(['role' => 'student']));
+        $this->postJson("/api/courses/{$course->id}/reviews", ['rating' => 5])->assertStatus(403);
+
+        $this->enrolledStudent($course);
+        $this->postJson("/api/courses/{$course->id}/reviews", ['rating' => 4, 'comment' => 'Bagus'])->assertStatus(201);
+        $this->postJson("/api/courses/{$course->id}/reviews", ['rating' => 5])->assertStatus(201);
+
+        $this->assertDatabaseCount('reviews', 1);
+        $this->postJson("/api/courses/{$course->id}/reviews", ['rating' => 9])->assertStatus(422);
+    }
 }
