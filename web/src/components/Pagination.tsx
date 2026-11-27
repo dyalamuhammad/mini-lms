@@ -22,7 +22,9 @@ export default function Pagination({
         ← Sebelumnya
       </button>
       <span className="text-sm text-slate-500">
-        Halaman {meta.current_page} dari {meta.last_page}
+        {meta.from && meta.to
+          ? `${meta.from}-${meta.to} dari ${meta.total}`
+          : `Halaman ${meta.current_page} dari ${meta.last_page}`}
       </span>
       <button
         className={btn}

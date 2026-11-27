@@ -20,6 +20,7 @@ class AdminCourseController extends Controller
             ->when($user->role !== 'admin', fn($q) => $q->where('instructor_id', $user->id))
             ->withCount(['modules', 'lessons', 'enrollments', 'reviews'])
             ->withAvg('reviews', 'rating')
+            ->when($request->search, fn($q, $s) => $q->where('title', 'like', "%$s%"))
             ->latest()
             ->paginate(5);
 

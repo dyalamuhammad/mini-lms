@@ -12,6 +12,9 @@ class Paginated
             'current_page' => $p->currentPage(),
             'last_page' => $p->lastPage(),
             'total' => $p->total(),
+            'per_page' => $p->perPage(),
+            'from' => $p->firstItem(),
+            'to' => $p->lastItem(),
         ];
     }
 }

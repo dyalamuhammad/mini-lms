@@ -262,4 +262,12 @@ class LearnPathTest extends TestCase
             ->assertOk()
             ->assertJsonCount(1, 'data.reviews');
     }
+    public function test_admin_course_list_can_be_searched_by_title(): void
+    {
+        $course = $this->makeCourse(); // judul "Course Test"
+        Sanctum::actingAs(User::find($course->instructor_id));
+
+        $this->getJson('/api/admin/courses?search=Test')->assertOk()->assertJsonCount(1, 'data');
+        $this->getJson('/api/admin/courses?search=zzz')->assertOk()->assertJsonCount(0, 'data');
+    }
 }
